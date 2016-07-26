@@ -14,7 +14,7 @@ CC = gcc
 
 NAME = rt
 
-FLAG = -Wall -Wextra -Werror -g
+FLAG = -Wall -Wextra -g#-Werror
 
 SRC = intersection.c output.c 
 

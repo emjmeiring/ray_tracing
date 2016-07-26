@@ -97,20 +97,17 @@ int main(void){
 	unsigned char img[WIDTH * HEIGHT * 3];
 	int hit;
 	float t;
-
 	
 	s.position.x = 200;
 	s.position.y = 200;
 	s.position.z = 100;
 	s.radius = 100;
-	
+
 	r.dir.x = 0;
 	r.dir.y = 0;
 	r.dir.z = 1;
 	r.origin.z = 0;
-	
-	
-	
+
 	for(i=0;i<HEIGHT;i++){
 		r.origin.y = i;
 		for(j=0;j<WIDTH;j++){
@@ -120,16 +117,15 @@ int main(void){
 			if(hit)
 			{
 				img[(j + i*WIDTH)*3 + 0] = 255;
-				img[(j + i*WIDTH)*3 + 1] = 10;
-				img[(j + i*WIDTH)*3 + 2] = 250;
+				img[(j + i*WIDTH)*3 + 1] = 190;
+				img[(j + i*WIDTH)*3 + 2] = 0;
 			}else
 			{
-				img[(j + i*WIDTH)*3 + 0] = 0;
-				img[(j + i*WIDTH)*3 + 1] = 0;
-				img[(j + i*WIDTH)*3 + 2] = 0;
+				img[(j + i*WIDTH)*3 + 0] = 219;
+				img[(j + i*WIDTH)*3 + 1] = 20;
+				img[(j + i*WIDTH)*3 + 2] = 147;
 			}
 		}
-			//printf("\n");
 	}
 	save_xpm("scene1.xpm", img, WIDTH, HEIGHT);
 	return (0);
