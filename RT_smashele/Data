@@ -1,0 +1,17 @@
+Object:	sphere;
+red:		500.762;
+blue:		20.923;
+radius:		923;
+length_y:	5034;
+
+Object:	cube;
+green:		-2000;
+reflection:	0.0;
+position_x:	30.0;
+position_z:	234;
+
+Object:	cylinder;
+radius:		1234.56789;
+length_x:	0.69;
+position_y:	2453.83748653;
+red:		8765.9837234;

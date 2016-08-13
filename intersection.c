@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rtv1.h"
+#include "rt.h"
 #include <stdio.h>
 
-float	dot_product(vec *a, vec *b)
+float	dot_product(t_vec *a, t_vec *b)
 {
 	float result;
 
@@ -21,9 +21,9 @@ float	dot_product(vec *a, vec *b)
 	return (result);
 }
 
-vec	vec_subtract(vec *a, vec *b)
+t_vec	vec_subtract(t_vec *a, t_vec *b)
 {
-	vec result;
+	t_vec result;
 
 	result.x = a->x - b->x;
 	result.y = a->y - b->y;
@@ -31,9 +31,9 @@ vec	vec_subtract(vec *a, vec *b)
 	return (result);
 }
 
-vec		scale_vec(float scalar, vec *v)
+t_vec		scale_vec(float scalar, t_vec *v)
 {
-	vec result;
+	t_vec result;
 
 	result.x = v->x * scalar;
 	result.y = v->y * scalar;
@@ -41,16 +41,16 @@ vec		scale_vec(float scalar, vec *v)
 	return (result);
 }
 
-vec		add_vec(vec *a, vec *b)
+t_vec		add_vec(t_vec *a, t_vec *b)
 {
-	vec result;
+	t_vec result;
 	
 	result.x = a->x + b->x;
 	result.y = a->y + b->y;
 	result.z = a->z + b->z;
 	return (result);
 }
-int		intersect_sphere(ray *r, sphere *s, float *closest)
+int		intersect_sphere(t_ray *r, t_sphere *s, float *closest)
 {
 	float	A;
 	float	B;
@@ -58,7 +58,7 @@ int		intersect_sphere(ray *r, sphere *s, float *closest)
 	float	discr;
 	float	t0;
 	float	t1;
-	vec		distance;
+	t_vec	distance;
 
 	A = dot_product(&r->dir, &r->dir);
 	distance = vec_subtract(&r->origin, &s->position);
@@ -83,14 +83,17 @@ int		intersect_sphere(ray *r, sphere *s, float *closest)
 		else return (0);
 	}
 }
+int		intersecting_plain(t_ray *r, t_sphere *s, float *closest)
+{
 
+}
 #define WIDTH  800
 #define HEIGHT 600
 
 int main(void){
 	
-	sphere s;
-	ray r;
+	t_sphere s;
+	t_ray r;
 		//material met;
 	
 	int i,j;

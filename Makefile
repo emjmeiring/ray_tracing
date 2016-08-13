@@ -39,7 +39,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 		@echo "Compiled the pieces together..."
 ifeq ($(shell uname), Linux)
-		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) $(LIXMLX)
+		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) -lm #$(LIXMLX)
 else
 		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) $(MACMLX)
 endif
