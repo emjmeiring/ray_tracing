@@ -1,15 +1,11 @@
 #include "RT.h"
-#include <stdio.h>
 
 t_object	*fresh_pony()
 {
 	t_object	*pony;
-	char		*x;
 
-	x = (char*)malloc(5);
-	x = "none\0";
 	pony = (t_object*)malloc(sizeof(t_object));
-	pony->NAME = x;
+	pony->NAME = NULL;
 	pony->RED = 0;
 	pony->GREEN = 0;
 	pony->BLUE = 0;
@@ -61,10 +57,8 @@ int	f_cmp(const char *s1, const char *s2, int a)
 		a++;
 		b++;
 	}
-	if (a == c && b == d)
-		return (s1[--a] - s2[--b]);
-	else
-		return (1);
+	c = a == c && b == d ? s1[--a] - s2[--b] : 1;
+	return (c);
 }
 
 float	f_atof(const char *s, int a)
@@ -84,10 +78,36 @@ float	f_atof(const char *s, int a)
 		a++;
 	neg = s[a] == 45 && s[a + 1] > 47 && s[a + 1] < 58 ? -1 : 1;
 	s[a] == 43 || s[a] == 45 ? a++ : 0;
-	while (s[a] && s[a] > 47 && s[a] < 59)
+	while (s[a] && s[a] > 47 && s[a] < 58)
 		res = res * 10 + (s[a++] - 48);
 	if (s[a] == '.')
 		while (s[++a] && s[a] > 47 && s[a] < 58 && b++ < 6)
 			res = res + (s[a] - 48) / (dec *= 10);
 	return (res * neg);
+}
+
+char	*unicorn_name(char *s, int a)
+{
+	int	b;
+	int	c;
+	char	*mew;
+
+	b = 0;
+	while (s[a] && s[a] != D1)
+		a++;
+	if (s[a++])
+	{
+		c = -1;
+		while (s[a + b] && s[a + b] != D2)
+			b++;
+		mew = (char*)malloc(sizeof(char) * (b + 1));
+		while (c++ < b)
+			mew[c] = 0;
+		c = -1;
+		while (++c < b)
+			mew[c] = s[a + c];
+		b > 0 && s[a] > 96 && s[a] < 123 ? mew[0] -= 32 : 0;
+		return (mew);
+	}
+	return (NULL);
 }

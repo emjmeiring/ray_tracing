@@ -50,7 +50,9 @@ typedef struct	object
 }		t_object;
 
 t_object	*fresh_pony();
+t_object	*get_scene(char *name);
 char		*clone(char **s, int count, int size);
+char		*unicorn_name(char *s, int a);
 int		f_cmp(const char *s1, const char *s2, int a);
 float		f_atof(const char *s, int a);
 

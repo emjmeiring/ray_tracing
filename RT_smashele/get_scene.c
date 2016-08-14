@@ -1,5 +1,23 @@
 #include "RT.h"
-#include <stdio.h>
+
+int	error_handle(const char *s)
+{
+	int	a;
+	int	this;
+	int	that;
+
+	this = 0;
+	that = 0;
+	a = -1;
+	while (s[++a])
+	{
+		s[a] == D1 ? this++ : 0;
+		s[a] == D2 ? that++ : 0;
+	}
+	if (s[--a] != D2 || this == 0 || that == 0)
+		return (1);
+	return (this - that);
+}
 
 void	save_pony(const char *s, int a, t_object *pony)
 {
@@ -24,19 +42,22 @@ void	save_pony(const char *s, int a, t_object *pony)
 	}
 }
 
-int	store_data(const char *line, t_object *pony)
+int	store_data(char *line, t_object *pony)
 {
 	int		a;
 	int		b;
 
 	a = -1;
 	b = 0;
+	if (error_handle(line) != 0)
+		return (0);
 	while (line[++a])
 	{
 		if (f_cmp(line, "object", a) == 0)
 		{
 			b > 0 ? pony->next = fresh_pony() : 0;
 			b > 0 ? pony = pony->next : 0;
+			pony->NAME = unicorn_name(line, a);
 			while (line[a] != ';')
 				a++;
 			save_pony(line, a, pony);
@@ -45,7 +66,7 @@ int	store_data(const char *line, t_object *pony)
 		while (line[a] != ';')
 			a++;
 	}
-	return (0);
+	return (1);
 }
 
 t_object	*get_scene(char *name)
@@ -72,33 +93,4 @@ t_object	*get_scene(char *name)
 	}
 	store_data(japan, pony);
 	return (temp);
-}
-
-int	main(int argc, char **argv)
-{
-	int		a;
-	t_object	*pony;
-
-	a = 0;
-	while (argv[++a])
-	{
-		pony = get_scene(argv[1]);
-		while (pony)
-		{
-			printf("%s - name:		%s\n", argv[1], pony->NAME);
-			printf("%s - red:		%f\n" , argv[1], pony->RED);
-			printf("%s - green:		%f\n" , argv[1], pony->GREEN);
-			printf("%s - blue:		%f\n" , argv[1], pony->BLUE);
-			printf("%s - reflection:	%f\n" , argv[1], pony->REF);
-			printf("%s - position_x:	%f\n" , argv[1], pony->POS_X);
-			printf("%s - position_y:	%f\n" , argv[1], pony->POS_Y);
-			printf("%s - position_z:	%f\n" , argv[1], pony->POS_Z);
-			printf("%s - radius:		%f\n" , argv[1], pony->RAD);
-			printf("%s - length_x:	%f\n" , argv[1], pony->LEN_X);
-			printf("%s - length_y:	%f\n" , argv[1], pony->LEN_Y);
-			printf("%s - length_z:	%f\n\n" , argv[1], pony->LEN_Z);
-			pony = pony->next;
-		}
-	}
-	return (2000);
 }
