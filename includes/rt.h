@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RTV1_H
-#define RTV1_H
+#ifndef RT_H
+#define RT_H
 //#include <mlx.h>
 #include <math.h>
 #include <unistd.h>
@@ -66,11 +66,15 @@ typedef struct	s_lightness
 
 typedef	struct	s_sphere
 {
-	t_vec		position; t_sphere s;s.position.x = atoi(strncpy(line[a], 
+	t_vec		position;
 	float		radius;
 	int			material;
 }				t_sphere;
 
-void	save_xpm(char *f_name, unsigned char *image, int width, int height);
+void		save_xpm(char *f_name, unsigned char *image, int width, int height);
+float		dot_product(t_vec *a, t_vec *b);
+t_vec		vec_subtract(t_vec *a, t_vec *b);
+t_vec		scale_vec(float scalar, t_vec *v);
+t_vec		add_vec(t_vec *a, t_vec *b);
 
 #endif

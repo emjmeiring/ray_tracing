@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
+#include "../includes/rt.h"
 #include <stdio.h>
-
+/*
 float	dot_product(t_vec *a, t_vec *b)
 {
 	float result;
@@ -50,6 +50,7 @@ t_vec		add_vec(t_vec *a, t_vec *b)
 	result.z = a->z + b->z;
 	return (result);
 }
+*/
 int		intersect_sphere(t_ray *r, t_sphere *s, float *closest)
 {
 	float	A;
@@ -86,7 +87,7 @@ int		intersect_sphere(t_ray *r, t_sphere *s, float *closest)
 int		intersecting_plain(t_ray *r, t_sphere *s, float *closest)
 {
 
-}
+}/*
 #define WIDTH  800
 #define HEIGHT 600
 
@@ -132,4 +133,4 @@ int main(void){
 	}
 	save_xpm("scene1.xpm", img, WIDTH, HEIGHT);
 	return (0);
-}
+}*/

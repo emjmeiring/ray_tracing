@@ -1,5 +1,52 @@
-#include "RT.h"
-#include <stdio.h>
+#include "includes/rt.h"
+#include "includes/get_scene.h"
+
+#define WIDTH  800
+#define HEIGHT 600
+
+void le_main()
+{
+	
+	t_sphere s;
+	t_ray r;
+		//material met;
+	
+	int i,j;
+	unsigned char img[WIDTH * HEIGHT * 3];
+	int hit;
+	float t;
+	
+	s.position.x = 200;
+	s.position.y = 200;
+	s.position.z = 100;
+	s.radius = 100;
+
+	r.dir.x = 0;
+	r.dir.y = 0;
+	r.dir.z = 1;
+	r.origin.z = 0;
+
+	for(i=0;i<HEIGHT;i++){
+		r.origin.y = i;
+		for(j=0;j<WIDTH;j++){
+			r.origin.x = j;
+			t = 2000.00f;
+			hit = intersect_sphere(&r, &s, &t);
+			if(hit)
+			{
+				img[(j + i*WIDTH)*3 + 0] = 255;
+				img[(j + i*WIDTH)*3 + 1] = 190;
+				img[(j + i*WIDTH)*3 + 2] = 0;
+			}else
+			{
+				img[(j + i*WIDTH)*3 + 0] = 219;
+				img[(j + i*WIDTH)*3 + 1] = 20;
+				img[(j + i*WIDTH)*3 + 2] = 147;
+			}
+		}
+	}
+	save_xpm("scene1.xpm", img, WIDTH, HEIGHT);
+}
 
 int	main(int argc, char **argv)
 {
@@ -27,5 +74,7 @@ int	main(int argc, char **argv)
 			pony = pony->next;
 		}
 	}
+	le_main();
 	return (2000);
 }
+

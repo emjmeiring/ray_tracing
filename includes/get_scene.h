@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RT_H
-# define RT_H
+#ifndef GET_SCENE_H
+# define GET_SCENE_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -32,28 +32,28 @@
 # define LEN_Y	length_y
 # define LEN_Z	length_z
 
-typedef struct	object
+typedef struct	s_object
 {
-	char	*NAME;
-	float	RED;
-	float	GREEN;
-	float	BLUE;
-	float	REF;
-	float	POS_X;
-	float	POS_Y;
-	float	POS_Z;
-	float	RAD;
-	float	LEN_X;
-	float	LEN_Y;
-	float	LEN_Z;
-	struct	object *next;
-}		t_object;
+	char		*NAME;
+	float		RED;
+	float		GREEN;
+	float		BLUE;
+	float		REF;
+	float		POS_X;
+	float		POS_Y;
+	float		POS_Z;
+	float		RAD;
+	float		LEN_X;
+	float		LEN_Y;
+	float		LEN_Z;
+	struct		s_object *next;
+}				t_object;
 
 t_object	*fresh_pony();
 t_object	*get_scene(char *name);
 char		*clone(char **s, int count, int size);
 char		*unicorn_name(char *s, int a);
-int		f_cmp(const char *s1, const char *s2, int a);
+int			f_cmp(const char *s1, const char *s2, int a);
 float		f_atof(const char *s, int a);
 
 #endif

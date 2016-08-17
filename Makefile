@@ -14,16 +14,14 @@ CC = gcc
 
 NAME = rt
 
-FLAG = -Wall -Wextra -g#-Werror
-
-SRC = intersection.c output.c 
+SRC = ./main.c ./rt_src/maths.c ./rt_src/intersection.c ./rt_src/output.c ./get_scene/get_scene.c ./get_scene/pony.c 
 
 RM = rm -f
 
 MACMLX = -lm -lmlx -framework OpenGL -framework AppKit
 LIXMLX = -lm -lmlx -lXext -lX11
 
-INC = -I /usr/include/X11 -I ./
+INC = -I ./incledes/ #/usr/include/X11 -I ./
 
 OBJ = $(SRC:.c=.o)
 

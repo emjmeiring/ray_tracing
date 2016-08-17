@@ -1,4 +1,4 @@
-#include "RT.h"
+#include "../includes/get_scene.h"
 
 t_object	*fresh_pony()
 {

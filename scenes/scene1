@@ -1,8 +1,8 @@
 Object:	sphere;
-red:		500.762;
-blue:		20.923;
-radius:		923;
-length_y:	5034;
+position_x:	200;
+position_y:	200;
+position_y: 100;
+radius:		100;
 
 Object:	cube;
 green:		-2000;

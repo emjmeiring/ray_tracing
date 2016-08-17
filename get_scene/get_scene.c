@@ -1,4 +1,4 @@
-#include "RT.h"
+#include "../includes/get_scene.h"
 
 int	error_handle(const char *s)
 {
