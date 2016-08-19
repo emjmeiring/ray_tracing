@@ -71,6 +71,7 @@ typedef	struct	s_sphere
 	int			material;
 }				t_sphere;
 
+int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
 void		save_xpm(char *f_name, unsigned char *image, int width, int height);
 float		dot_product(t_vec *a, t_vec *b);
 t_vec		vec_subtract(t_vec *a, t_vec *b);

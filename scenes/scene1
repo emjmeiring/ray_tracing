@@ -1,17 +1,21 @@
-Object:	sphere;
+Object:	sphere1;
 position_x:	200;
 position_y:	200;
-position_y: 100;
+position_z: 	50;
 radius:		100;
+red:		255;
 
-Object:	cube;
-green:		-2000;
-reflection:	0.0;
-position_x:	30.0;
-position_z:	234;
+Object:	sphere2;
+position_x:	300;
+position_y:	300;
+position_z: 	100;
+radius:		100;
+blue:		255;
 
-Object:	cylinder;
-radius:		1234.56789;
-length_x:	0.69;
-position_y:	2453.83748653;
-red:		8765.9837234;
+Object:	sphere3;
+position_x:	100;
+position_y:	300;
+position_z: 	900;
+radius:		100;
+green:		255;
+
