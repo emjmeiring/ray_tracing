@@ -16,6 +16,8 @@
 #include <math.h>
 #include <unistd.h>
 #include <stdlib.h>
+#define WIDTH  800
+#define HEIGHT 600
 
 typedef struct	s_color
 {
@@ -71,6 +73,22 @@ typedef	struct	s_sphere
 	int			material;
 }				t_sphere;
 
+typedef struct	s_counters
+{
+	int			i;
+	int			j;
+	int			k;
+	float		inv_w;
+	float		inv_h;
+	float		f_v;
+	float		aspect_r;
+	float		angle;
+	float		x_dir;
+	float		y_dir;
+	t_color		pixel;
+}				t_index;
+
+void		set_up_num(t_index *num);
 int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
 void		save_xpm(char *f_name, unsigned char *image, int width, int height);
 float		dot_product(t_vec *a, t_vec *b);

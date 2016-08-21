@@ -1,21 +1,22 @@
 Object:	sphere1;
 position_x:	200;
 position_y:	200;
-position_z: 	50;
-radius:		100;
+position_z: 50;
+radius:		100;	
 red:		255;
 
 Object:	sphere2;
 position_x:	300;
 position_y:	300;
-position_z: 	100;
+position_z: 100;
 radius:		100;
 blue:		255;
 
-Object:	sphere3;
+Object:	light;
 position_x:	100;
 position_y:	300;
-position_z: 	900;
+position_z: 900;
 radius:		100;
+red:		255;
 green:		255;
-
+blue:		255;
