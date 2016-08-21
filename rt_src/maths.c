@@ -1,6 +1,6 @@
 #include "../includes/rt.h"
 
-float	dot_product(t_vec *a, t_vec *b)
+float		dot_product(t_vec *a, t_vec *b)
 {
 	float result;
 
@@ -8,7 +8,7 @@ float	dot_product(t_vec *a, t_vec *b)
 	return (result);
 }
 
-t_vec	vec_subtract(t_vec *a, t_vec *b)
+t_vec		vec_subtract(t_vec *a, t_vec *b)
 {
 	t_vec result;
 

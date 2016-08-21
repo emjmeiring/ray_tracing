@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RT.h                                               :+:      :+:    :+:   */
+/*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: smashele <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/08/08 15:59:25 by smashele          #+#    #+#             */
-/*   Updated: 2016/08/08 16:53:52 by smashele         ###   ########.fr       */
+/*   Created: 2016/08/21 12:45:52 by smashele          #+#    #+#             */
+/*   Updated: 2016/08/21 12:45:55 by smashele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,43 +18,38 @@
 # include <fcntl.h>
 # include <stdio.h>
 
-# define D1	':'
-# define D2	';'
-# define NAME	name
-# define RED	red
-# define GREEN	green
-# define BLUE	blue
-# define REF	reflection
-# define POS_X	position_x
-# define POS_Y	position_y
-# define POS_Z	position_z
-# define RAD	radius
-# define LEN_X	length_x
-# define LEN_Y	length_y
-# define LEN_Z	length_z
+# define R1		pony->radius
+
+typedef struct	s_mem_list
+{
+	void				*address;
+	struct s_mem_list	*next;
+}				t_mem_list;
 
 typedef struct	s_object
 {
-	char		*NAME;
-	float		RED;
-	float		GREEN;
-	float		BLUE;
-	float		REF;
-	float		POS_X;
-	float		POS_Y;
-	float		POS_Z;
-	float		RAD;
-	float		LEN_X;
-	float		LEN_Y;
-	float		LEN_Z;
-	struct		s_object *next;
+	char			*name;
+	float			red;
+	float			green;
+	float			blue;
+	float			reflection;
+	float			position_x;
+	float			position_y;
+	float			position_z;
+	float			radius;
+	float			radius_x2;
+	float			length_x;
+	float			length_y;
+	float			length_z;
+	struct s_object *next;
 }				t_object;
 
-t_object	*fresh_pony();
-t_object	*get_scene(char *name);
-char		*clone(char **s, int count, int size);
-char		*unicorn_name(char *s, int a);
-int			f_cmp(const char *s1, const char *s2, int a);
-float		f_atof(const char *s, int a);
+t_object		*fresh_pony(void);
+t_object		*get_scene(char *name);
+char			*clone(char **s, int count, int size);
+char			*unicorn_name(char *s, int a);
+int				f_cmp(const char *s1, const char *s2, int a);
+void			pony_freedom(t_object *first);
+float			f_atof(const char *s, int a);
 
 #endif

@@ -16,8 +16,10 @@
 #include <math.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include "get_scene.h"
 #define WIDTH  800
 #define HEIGHT 600
+#define INF 1e8
 
 typedef struct	s_color
 {
@@ -89,7 +91,7 @@ typedef struct	s_counters
 }				t_index;
 
 void		set_up_num(t_index *num);
-int			intersect_sphere(t_ray *r, t_sphere *s, float *t);
+int			intersect_sphere(t_ray *r, t_object *s, float t[]);
 void		save_xpm(char *f_name, unsigned char *image, int width, int height);
 float		dot_product(t_vec *a, t_vec *b);
 t_vec		vec_subtract(t_vec *a, t_vec *b);

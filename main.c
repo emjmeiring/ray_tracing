@@ -34,15 +34,36 @@ t_vec	normalize(t_ray *r)
 	return (dir);
 }
 
-t_color		trace(t_ray *r, t_object objects, int depth)
+t_color		trace(t_ray *r, t_object *objects, int depth)
 {
 	t_color		pixel;
-	
-	
+	t_object	*sphere;
+	t_object	*pony;
+	float		tclosest;
+	float		t[2];
+
+	sphere = NULL;
+	pony =	objects;
+	t[0] = INF;
+	t[1] = INF;
+	tclosest = INF;
+	while (pony)
+	{
+		if (intersect_sphere(r, pony, t))
+		{
+			t[0] < 0 ? t[0] = t[1] : 0;
+			if (t[0] < tclosest)
+			{
+				tclosest = t[0];
+				sphere = pony;	
+			}
+		}
+		pony = pony->next;
+	}
 	return (pixel);
 }
 
-void le_main()
+void le_main(t_object *objects)
 {
 	t_object		*pony;
 	t_ray			r;
@@ -54,7 +75,6 @@ void le_main()
 	r.origin.y = 0;
 	r.origin.z = 0;
 	set_up_num(&num);
-	//r = (t_ray *)malloc(sizeof(r) * 1);
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;
@@ -65,12 +85,15 @@ void le_main()
 			r.dir.x = num.x_dir;
 			r.dir.y = num.y_dir;
 			r.dir.z = -1.f;
+			
 			printf("1x=%f==\n", r.dir.x);
 			printf("1y=%f==\n", r.dir.y);
 			printf("1z=%f==\n", r.dir.z);
 			printf("1len		%f\n", sqrt(length2(&r)));
+			
 			r.dir = normalize(&r);
-			pixel = trace(&r, objects, 0);
+				//pixel = trace(&r, objects, 0);
+			
 			printf("x=%f==\n", r.dir.x);
 			printf("y=%f==\n", r.dir.y);
 			printf("z=%f==\n", r.dir.z);
@@ -124,31 +147,33 @@ int	main(int argc, char **argv)
 	int		a;
 	t_object	*pony;
 	t_object	*objects;
-
-	a = 0;
-	objects = NULL;
-	while (argv[++a])
+	
+	if (argc != 2)
+		return (0);
+	while (*++argv)
 	{
-		objects = get_scene(argv[a]);
+		objects = get_scene(*argv);
 		pony = objects;
 		while (pony)
 		{
-			printf("%s - name:		%s\n", argv[1], pony->NAME);
-			printf("%s - red:		%f\n" , argv[1], pony->RED);
-			printf("%s - green:		%f\n" , argv[1], pony->GREEN);
-			printf("%s - blue:		%f\n" , argv[1], pony->BLUE);
-			printf("%s - reflection:	%f\n" , argv[1], pony->REF);
-			printf("%s - position_x:	%f\n" , argv[1], pony->POS_X);
-			printf("%s - position_y:	%f\n" , argv[1], pony->POS_Y);
-			printf("%s - position_z:	%f\n" , argv[1], pony->POS_Z);
-			printf("%s - radius:		%f\n" , argv[1], pony->RAD);
-			printf("%s - length_x:	%f\n" , argv[1], pony->LEN_X);
-			printf("%s - length_y:	%f\n" , argv[1], pony->LEN_Y);
-			printf("%s - length_z:	%f\n\n" , argv[1], pony->LEN_Z);
+			printf("%s - name:		%s\n", *argv, pony->name);
+			printf("%s - red:		%f\n", *argv, pony->red);
+			printf("%s - green:		%f\n", *argv, pony->green);
+			printf("%s - blue:		%f\n", *argv, pony->blue);
+			printf("%s - reflection:	%f\n", *argv, pony->reflection);
+			printf("%s - position_x:	%f\n", *argv, pony->position_x);
+			printf("%s - position_y:	%f\n", *argv, pony->position_y);
+			printf("%s - position_z:	%f\n", *argv, pony->position_z);
+			printf("%s - radius:		%f\n", *argv, pony->radius);
+			printf("%s - radius_x2:	%f\n", *argv, pony->radius_x2);
+			printf("%s - length_x:	%f\n", *argv, pony->length_x);
+			printf("%s - length_y:	%f\n", *argv, pony->length_y);
+			printf("%s - length_z:	%f\n\n", *argv, pony->length_z);
 			pony = pony->next;
 		}
 	}
-	le_main();
+	le_main(objects);
+	pony_freedom(objects);
 	return (2000);
 }
 
