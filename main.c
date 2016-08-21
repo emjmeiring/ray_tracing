@@ -40,7 +40,7 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	t_object	*sphere;
 	t_object	*pony;
 	float		tclosest;
-	float		t[2];
+	float		*t = (float *)malloc(sizeof(float)*2);
 
 	sphere = NULL;
 	pony =	objects;
@@ -49,15 +49,24 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	tclosest = INF;
 	while (pony)
 	{
-		if (intersect_sphere(r, pony, t))
+			//printf("^^%f^%f^^\n", t[0], t[1]);
+		if (intersect_sphere(r, pony, &t))
 		{
-			t[0] < 0 ? t[0] = t[1] : 0;
+				//printf("hit\n");
+				//printf("name:		%s\n", pony->name);
+				//printf("**%p**\n", sphere);
+				//t[0] < 0 ? t[0] = t[1] : 0;
 			if (t[0] < tclosest)
 			{
 				tclosest = t[0];
-				sphere = pony;	
+				sphere = pony;
+				printf("**%p**\n", sphere);
+
 			}
 		}
+			//printf("2^^%f^%f^^\n", t[0], t[1]);
+			//printf("name:		%s\n", pony->name);
+			//printf("**%p**\n", sphere);
 		pony = pony->next;
 	}
 	return (pixel);
@@ -86,19 +95,19 @@ void le_main(t_object *objects)
 			r.dir.y = num.y_dir;
 			r.dir.z = -1.f;
 			
-			printf("1x=%f==\n", r.dir.x);
+			/*printf("1x=%f==\n", r.dir.x);
 			printf("1y=%f==\n", r.dir.y);
 			printf("1z=%f==\n", r.dir.z);
 			printf("1len		%f\n", sqrt(length2(&r)));
-			
+			*/
 			r.dir = normalize(&r);
-				//pixel = trace(&r, objects, 0);
-			
+			pixel = trace(&r, objects, 0);
+			/*
 			printf("x=%f==\n", r.dir.x);
 			printf("y=%f==\n", r.dir.y);
 			printf("z=%f==\n", r.dir.z);
 			printf("len		%f\n", sqrt(length2(&r)));
-			//printf("**%f**\n", r.dir.x);
+			//printf("**%f**\n", r.dir.x);*/
 			num.j++;
 		}
 		num.i++;

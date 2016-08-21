@@ -15,6 +15,7 @@ t_vec		vec_subtract(t_vec *a, t_vec *b)
 	result.x = a->x - b->x;
 	result.y = a->y - b->y;
 	result.z = a->z - b->z;
+		//printf("1#%f#%f#%f#\n", result.x, result.y, result.z);
 	return (result);
 }
 

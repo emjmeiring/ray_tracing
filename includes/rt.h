@@ -91,7 +91,7 @@ typedef struct	s_counters
 }				t_index;
 
 void		set_up_num(t_index *num);
-int			intersect_sphere(t_ray *r, t_object *s, float t[]);
+int			intersect_sphere(t_ray *r, t_object *s, float **t);
 void		save_xpm(char *f_name, unsigned char *image, int width, int height);
 float		dot_product(t_vec *a, t_vec *b);
 t_vec		vec_subtract(t_vec *a, t_vec *b);
