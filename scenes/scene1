@@ -1,20 +1,23 @@
 Object:	sphere;
 position_z: -30;
 radius:		3;	
-red:		255;
+red:		1;
+blue:		1;
 
 Object:	sphere;
 position_x:	5;
 position_y:	-2;
 position_z: -15;
 radius:		5;
-blue:		255;
+red:		0.9;
+green:		1;
+blue:		0.5;
 
 Object:	light;
 position_x:	0;
 position_y:	20;
 position_z: -30;
 radius:		2;
-red:		255;
-green:		255;
-blue:		255;
+red:		1;
+green:		1;
+blue:		1;

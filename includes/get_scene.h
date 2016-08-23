@@ -33,6 +33,7 @@ typedef struct	s_object
 	float			green;
 	float			blue;
 	float			reflection;
+	float			trans;
 	float			position_x;
 	float			position_y;
 	float			position_z;

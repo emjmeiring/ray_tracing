@@ -61,6 +61,7 @@ int			save_pony(const char *s, int a, t_object *pony)
 		f_cmp(s, "green", a) == 0 ? pony->green = f_atof(s, a) : 0;
 		f_cmp(s, "blue", a) == 0 ? pony->blue = f_atof(s, a) : 0;
 		f_cmp(s, "reflection", a) == 0 ? pony->reflection = f_atof(s, a) : 0;
+		f_cmp(s, "trans", a) == 0 ? pony->trans = f_atof(s, a) : 0;
 		f_cmp(s, "position_x", a) == 0 ? pony->position_x = f_atof(s, a) : 0;
 		f_cmp(s, "position_y", a) == 0 ? pony->position_y = f_atof(s, a) : 0;
 		f_cmp(s, "position_z", a) == 0 ? pony->position_z = f_atof(s, a) : 0;

@@ -22,6 +22,7 @@ t_object	*fresh_pony(void)
 	pony->green = 0;
 	pony->blue = 0;
 	pony->reflection = 0;
+	pony->trans = 0;
 	pony->position_x = 0;
 	pony->position_y = 0;
 	pony->position_z = 0;

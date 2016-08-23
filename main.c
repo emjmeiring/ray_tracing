@@ -54,7 +54,7 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	tclosest = INF;
 	bias = 1e-4;
 	inside = 0;
-		//neg = (t_vec){-1, -1, -1};
+//neg = (t_vec){-1, -1, -1};
 	while (pony && strcmp(pony->name, "Sphere") == 0)
 	{
 			//printf("%s : ", pony->name);
@@ -79,16 +79,17 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 		return (t_color){2,2,2};
 	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
 	n_hit = vec_subtract(p_hit, (t_vec){pony->position_x, pony->position_y, pony->position_z});
-	normalize(&n_hit);
+	n_hit = normalize(&n_hit);
 	if (dot_product(r->dir, n_hit) > 0)
 	{
 		n_hit = scale_vec(-1.f, n_hit);
 		inside = 1;
 	}
-	
-		//printf(" :%d: ", i);
+	if(inside)printf("p_hit:(%f,%f,%f)\n n_hit:(%f,%f,%f)\nin: %d\nn_hit Len: %f\n", p_hit.x, p_hit.y, p_hit.z, n_hit.x, n_hit.y, n_hit.z, inside, sqrt(dot_product(n_hit,n_hit)));
+//printf(" :%d: ", i);
 	return (pixel);
 }
+/*
 //remove this pony if getsnene works
 t_object	*my_pony(void)
 {
@@ -111,7 +112,7 @@ t_object	*my_pony(void)
 	pony->next = NULL;
 	return (pony);
 }
-
+*/
 void le_main(t_object *objects)
 {
 	t_object		*pony;
@@ -143,6 +144,7 @@ void le_main(t_object *objects)
 			printf("1len		%f\n", sqrt(length2(&r)));
 			*/
 			r.dir = normalize(&r.dir);
+			//printf("1len		%f\n", sqrt(dot_product(r.dir,r.dir)));
 			pixel = trace(&r, objects, 0);
 			/*
 			printf("x=%f==\n", r.dir.x);
@@ -212,6 +214,7 @@ int	main(int argc, char **argv)
 			printf("%s - green:		%f\n", *argv, pony->green);
 			printf("%s - blue:		%f\n", *argv, pony->blue);
 			printf("%s - reflection:	%f\n", *argv, pony->reflection);
+			printf("%s - transparency:	%f\n", *argv, pony->trans);
 			printf("%s - position_x:	%f\n", *argv, pony->position_x);
 			printf("%s - position_y:	%f\n", *argv, pony->position_y);
 			printf("%s - position_z:	%f\n", *argv, pony->position_z);
