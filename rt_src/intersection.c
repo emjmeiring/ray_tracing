@@ -25,16 +25,15 @@ int		intersect_sphere(t_ray *r, t_object *s, float *t0, float *t1)
 	//printf("t0: %f\nt1: %f\n", *t0, *t1);
 	position = (t_vec){s->position_x, s->position_y, s->position_z};
 	//printf("pos = #%f#%f#%f#\n", s->position_x, s->position_y, s->position_z);
-	l = vec_subtract(&position, &r->origin);
+	l = vec_subtract(position, r->origin);
 	//printf("l = #%f#%f#%f#\n", l.x, l.y, l.z);
-	tca = dot_product(&l, &r->dir);
-	
+	tca = dot_product(l, r->dir);
 	if (tca < 0)
 	{
 			//write(1, "ass!", 4);
 		return (0);
 	}
-	d2 = dot_product(&l, &l) - tca * tca;
+	d2 = dot_product(l, l) - tca * tca;
 	if (d2 > s->radius_x2)
 		return (0);
 	thc = sqrt(s->radius_x2 - d2);

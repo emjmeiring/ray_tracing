@@ -15,6 +15,7 @@
 //#include <mlx.h>
 #include <math.h>
 #include <unistd.h>
+#include <string.h>
 #include <stdlib.h>
 #include "get_scene.h"
 #define WIDTH  800
@@ -93,9 +94,9 @@ typedef struct	s_counters
 void		set_up_num(t_index *num);
 int			intersect_sphere(t_ray *r, t_object *s, float *t0, float *t1);
 void		save_xpm(char *f_name, unsigned char *image, int width, int height);
-float		dot_product(t_vec *a, t_vec *b);
-t_vec		vec_subtract(t_vec *a, t_vec *b);
-t_vec		scale_vec(float scalar, t_vec *v);
-t_vec		add_vec(t_vec *a, t_vec *b);
+float		dot_product(t_vec a, t_vec b);
+t_vec		vec_subtract(t_vec a, t_vec b);
+t_vec		scale_vec(float scalar, t_vec v);
+t_vec		add_vec(t_vec a, t_vec b);
 
 #endif

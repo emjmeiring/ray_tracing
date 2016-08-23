@@ -1,11 +1,9 @@
-Object:	sphere1;
-position_x:	0;
-position_y:	0;
+Object:	sphere;
 position_z: -30;
 radius:		3;	
 red:		255;
 
-Object:	sphere2;
+Object:	sphere;
 position_x:	5;
 position_y:	-2;
 position_z: -15;

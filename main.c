@@ -1,21 +1,21 @@
 #include "includes/rt.h"
 #include "includes/get_scene.h"
 
-float	length2(t_ray *r)
+float	length2(t_vec *r)
 {
 	float x;
 
-	x = r->dir.x * r->dir.x + r->dir.y * r->dir.y + r->dir.z * r->dir.z;
+	x = r->x * r->x + r->y * r->y + r->z * r->z;
 	return (x);
 }
 
-t_vec	normalize(t_ray *r)
+t_vec	normalize(t_vec *r)
 {
 	float	len;
 	float	bla;
 	t_vec	dir;
 
-	bla = length2(r);
+	bla = dot_product(*r,*r);
 	if (bla > 0)
 	{
 		len = 1.f / sqrt(bla);
@@ -23,9 +23,7 @@ t_vec	normalize(t_ray *r)
 			//printf("1y=%f==\n", r->dir.y);
 			//printf("1z=%f==\n", r->dir.z);
 			//printf("1len		%f\n", sqrt(length2(r)));
-		dir.x = r->dir.x * len;
-		dir.y = r->dir.y * len;
-		dir.z = r->dir.z * len;
+		dir = scale_vec(len, *r);
 		//printf("2x=%f==\n", dir.x);
 		//printf("2y=%f==\n", dir.y);
 		//printf("2z=%f==\n", dir.z);
@@ -37,19 +35,29 @@ t_vec	normalize(t_ray *r)
 t_color		trace(t_ray *r, t_object *objects, int depth)
 {
 	t_color		pixel;
+	t_color		surf_color;
 	t_object	*sphere;
 	t_object	*pony;
+	t_vec		p_hit;
+	t_vec		n_hit;
+		//t_vec		neg;
+	float		bias;
 	float		tclosest;
 	float		t0;
 	float		t1;
-	static int i =0;
+	int			inside;
+		//static int i =0;
 	sphere = NULL;
 	pony =	objects;
 	t0 = INF;
 	t1 = INF;
 	tclosest = INF;
-	while (pony)
+	bias = 1e-4;
+	inside = 0;
+		//neg = (t_vec){-1, -1, -1};
+	while (pony && strcmp(pony->name, "Sphere") == 0)
 	{
+			//printf("%s : ", pony->name);
 //printf("^^%f^%f^^\n", t[0], t[1]);//printf("pos = #%f#%f#%f#\n", pony->position_x, pony->position_y, pony->position_z);
 		if (intersect_sphere(r, pony, &t0, &t1))
 		{
@@ -66,10 +74,19 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 			//printf("**%p**\n", sphere);
 		pony = pony->next;
 	}
-	if(return)
-		sphere t_vec{2,2,2};
+		//printf(" :%d: ", i);
+	if(!sphere)
+		return (t_color){2,2,2};
+	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
+	n_hit = vec_subtract(p_hit, (t_vec){pony->position_x, pony->position_y, pony->position_z});
+	normalize(&n_hit);
+	if (dot_product(r->dir, n_hit) > 0)
+	{
+		n_hit = scale_vec(-1.f, n_hit);
+		inside = 1;
+	}
 	
-//printf(" :%d: ", i);
+		//printf(" :%d: ", i);
 	return (pixel);
 }
 //remove this pony if getsnene works
@@ -107,8 +124,8 @@ void le_main(t_object *objects)
 	r.origin.y = 0;
 	r.origin.z = 0;
 	set_up_num(&num);
-	objects = my_pony();
-	objects->next = my_pony();
+		//objects = my_pony();
+		//objects->next = my_pony();
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;
@@ -125,7 +142,7 @@ void le_main(t_object *objects)
 			printf("1z=%f==\n", r.dir.z);
 			printf("1len		%f\n", sqrt(length2(&r)));
 			*/
-			r.dir = normalize(&r);
+			r.dir = normalize(&r.dir);
 			pixel = trace(&r, objects, 0);
 			/*
 			printf("x=%f==\n", r.dir.x);
