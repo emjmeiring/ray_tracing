@@ -40,36 +40,59 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	t_object	*sphere;
 	t_object	*pony;
 	float		tclosest;
-	float		*t = (float *)malloc(sizeof(float)*2);
-
+	float		t0;
+	float		t1;
+	static int i =0;
 	sphere = NULL;
 	pony =	objects;
-	t[0] = INF;
-	t[1] = INF;
+	t0 = INF;
+	t1 = INF;
 	tclosest = INF;
 	while (pony)
 	{
-			//printf("^^%f^%f^^\n", t[0], t[1]);
-		if (intersect_sphere(r, pony, &t))
+//printf("^^%f^%f^^\n", t[0], t[1]);//printf("pos = #%f#%f#%f#\n", pony->position_x, pony->position_y, pony->position_z);
+		if (intersect_sphere(r, pony, &t0, &t1))
 		{
-				//printf("hit\n");
-				//printf("name:		%s\n", pony->name);
-				//printf("**%p**\n", sphere);
-				//t[0] < 0 ? t[0] = t[1] : 0;
-			if (t[0] < tclosest)
+//i++;//printf("hit");//printf("name: %s\n", pony->name);//printf("**%p**\n", sphere);
+			t0 < 0 ? t0 = t1 : 0;
+			if (t0 < tclosest)
 			{
-				tclosest = t[0];
+				tclosest = t0;
 				sphere = pony;
-				printf("**%p**\n", sphere);
-
+//printf("**%p**\n", sphere);
 			}
 		}
-			//printf("2^^%f^%f^^\n", t[0], t[1]);
-			//printf("name:		%s\n", pony->name);
+//printf("2^^%f^%f^^\n", t[0], t[1]);//printf("name:		%s\n", pony->name);
 			//printf("**%p**\n", sphere);
 		pony = pony->next;
 	}
+	if(return)
+		sphere t_vec{2,2,2};
+	
+//printf(" :%d: ", i);
 	return (pixel);
+}
+//remove this pony if getsnene works
+t_object	*my_pony(void)
+{
+	t_object	*pony;
+	static int i=0;
+	pony = (t_object*)malloc(sizeof(t_object));
+	pony->name = "sphere";
+	pony->red = 200;
+	pony->green = 100;
+	pony->blue = 255;
+	pony->reflection = 1;
+	pony->position_x = 0;
+	pony->position_y = i;
+	pony->position_z = -20;
+	pony->radius = 2*(++i);
+	pony->radius_x2 = pony->radius*pony->radius;
+	pony->length_x = 0;
+	pony->length_y = 0;
+	pony->length_z = 0;
+	pony->next = NULL;
+	return (pony);
 }
 
 void le_main(t_object *objects)
@@ -84,6 +107,8 @@ void le_main(t_object *objects)
 	r.origin.y = 0;
 	r.origin.z = 0;
 	set_up_num(&num);
+	objects = my_pony();
+	objects->next = my_pony();
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;

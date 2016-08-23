@@ -80,7 +80,7 @@ float		f_atof(const char *s, int a)
 	float	dec;
 	float	neg;
 	int		b;
-	
+
 	res = 0;
 	b = 0;
 	dec = 1;

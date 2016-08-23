@@ -14,35 +14,36 @@
 #include "../includes/get_scene.h"
 #include <stdio.h>
 
-int		intersect_sphere(t_ray *r, t_object *s, float **t)
+int		intersect_sphere(t_ray *r, t_object *s, float *t0, float *t1)
 {
 	t_vec	l;
 	t_vec	position;
 	float	tca;
 	float	thc;
 	float	d2;
-	static int i =0;
-		//printf("^^%f^%f^^\n", **t, *(*t +1));
+	
+	//printf("t0: %f\nt1: %f\n", *t0, *t1);
 	position = (t_vec){s->position_x, s->position_y, s->position_z};
+	//printf("pos = #%f#%f#%f#\n", s->position_x, s->position_y, s->position_z);
 	l = vec_subtract(&position, &r->origin);
-		//printf("2#%f#%f#%f#\n", l.x, l.y, l.z);
+	//printf("l = #%f#%f#%f#\n", l.x, l.y, l.z);
 	tca = dot_product(&l, &r->dir);
 	
 	if (tca < 0)
 	{
-			//write(1, "ass\n", 4);
+			//write(1, "ass!", 4);
 		return (0);
 	}
 	d2 = dot_product(&l, &l) - tca * tca;
 	if (d2 > s->radius_x2)
 		return (0);
 	thc = sqrt(s->radius_x2 - d2);
-	printf("l: %f %f %f\n dir: %f %f %f\n tca = %f\n %d\n", l.x, l.y, l.z, r->dir.x, r->dir.y, r->dir.z, tca, ++i);
-	printf("-_%f_-\n", thc);
-	**t = tca - thc;
-	*(*t +1) = tca + thc;
-	printf("^^%f^%f^^\n", (*t)[0], (*t)[1]);
-		//write(1, "ass\n", 4);
+	//printf("l: %f %f %f\ndir: %f %f %f\ntca = %f\n %d\n", l.x, l.y, l.z, r->dir.x, r->dir.y, r->dir.z, tca, ++i);
+	//printf("thc: %f\n", thc);
+	*t0 = tca - thc;
+	*t1  = tca + thc;
+	//printf("fanal t0:%f\nfinal t1: %f\n", *t0, *t1);
+		//write(1, "kla,", 4);
 	return (1);
 }
 /*
