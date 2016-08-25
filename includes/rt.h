@@ -99,5 +99,6 @@ float		dot_product(t_vec a, t_vec b);
 t_vec		vec_subtract(t_vec a, t_vec b);
 t_vec		scale_vec(float scalar, t_vec v);
 t_vec		add_vec(t_vec a, t_vec b);
+t_vec		cross_prod(t_vec a, t_vec b);
 
 #endif

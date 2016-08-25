@@ -37,14 +37,18 @@ float		mix(float a, float b, float mix)
 	return (b * mix + a * (1 - mix));
 }
 
-t_color		trace(t_ray *r, t_object *objects, int depth)
+t_vec		trace(t_ray *r, t_object *objects, int depth)
 {
-	t_color		pixel;
-	t_color		surf_color;
+	t_vec		pixel;
+	t_vec		surf_color;
 	t_object	*sphere;
 	t_object	*pony;
 	t_vec		p_hit;
 	t_vec		n_hit;
+	t_vec		refl_color;
+	t_vec		refr_color;
+	t_ray		refl;
+	t_ray		refr;
 		//t_vec		neg;
 	float		bias;
 	float		tclosest;
@@ -52,6 +56,10 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	float		t1;
 	float		facing_ratio;
 	float		fresnel;
+	float		ior;
+	float		eta;
+	float		cosi;
+	float		k;
 	int			inside;
 		//static int i =0;
 	sphere = NULL;
@@ -62,6 +70,10 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	bias = 1e-4;
 	inside = 0;
 	facing_ratio = 0;
+	ior = 1.1;
+	eta = 0;
+	cosi = 0;
+	k = 0;
 //neg = (t_vec){-1, -1, -1};
 	while (pony && strcmp(pony->name, "Sphere") == 0)
 	{
@@ -84,7 +96,7 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	}
 //printf(" :%d: ", i);
 	if(!sphere)
-		return (t_color){2,2,2};
+		return (t_vec){2,2,2};
 	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
 	n_hit = vec_subtract(p_hit, (t_vec){pony->position_x, pony->position_y, pony->position_z});
 	n_hit = normalize(&n_hit);
@@ -92,12 +104,30 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	{
 		n_hit = scale_vec(-1.f, n_hit);
 		inside = 1;
-printf("p_hit:(%f,%f,%f)\n n_hit:(%f,%f,%f)\nin: %d\nn_hit Len: %f\n", p_hit.x, p_hit.y, p_hit.z, n_hit.x, n_hit.y, n_hit.z, inside, sqrt(dot_product(n_hit,n_hit)));
+			//printf("p_hit:(%f,%f,%f)\n n_hit:(%f,%f,%f)\nin: %d\nn_hit Len: %f\n", p_hit.x, p_hit.y, p_hit.z, n_hit.x, n_hit.y, n_hit.z, inside, sqrt(dot_product(n_hit,n_hit)));
 	}
-	if ((sphere->trans > 0 || sphere->reflection) && depth < M_DEPTH)
+	if ((sphere->trans > 0 || sphere->reflection > 0) && depth < M_DEPTH)
 	{
 		facing_ratio = -1 * dot_product(r->dir, n_hit);
-		fresnel = mix(pow(1 - facingratio, 3), 1, 0.1);
+		fresnel = mix(pow(1 - facing_ratio, 3), 1, 0.1);
+		refl.dir = vec_subtract(r->dir, scale_vec(2*dot_product(r->dir, n_hit), n_hit));
+		refl.dir = normalize(&refl.dir);
+		refl.origin = add_vec(p_hit, scale_vec(bias, n_hit));
+		refl_color = trace(&refl, objects, depth + 1);
+		if (sphere->trans)
+		{
+			if(inside)
+				eta = ior;
+			else eta = .1f * ior;
+			cosi = -1 * dot_product(n_hit, r->dir);
+			k = 1 - eta * eta * (1 - cosi * cosi);
+			refr.dir = add_vec(scale_vec(eta, r->dir), scale_vec(eta * cosi - sqrt(k), n_hit));
+			refr.dir = normalize(&refr.dir);
+			refr.origin = vec_subtract(p_hit, scale_vec(bias, n_hit));
+			refr_color = trace(&refr, objects, depth + 1);
+		}
+		surf_color = add_vec(scale_vec(fresnel, (t_vec)refl_color), scale_vec((1 -fresnel) *  sphere->trans,(t_vec)refr_color));
+		surf_color = cross_prod(surf_color, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
 	}
 //printf(" :%d: ", i);
 	return (pixel);
@@ -132,7 +162,7 @@ void le_main(t_object *objects)
 	t_ray			r;
 	t_index			num;
 	unsigned char	img[WIDTH * HEIGHT * 3];
-	t_color			pixel;
+	t_vec			pixel;
 
 	r.origin.x = 0;
 	r.origin.y = 0;

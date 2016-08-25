@@ -19,3 +19,8 @@ t_vec		add_vec(t_vec a, t_vec b)
 {
 	return (t_vec){a.x + b.x, a.y + b.y, a.z + b.z};
 }
+
+t_vec		cross_prod(t_vec a, t_vec b)
+{
+	return (t_vec){a.x * b.x,a.y * b.y,a.z * b.z};
+}
