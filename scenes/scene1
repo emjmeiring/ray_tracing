@@ -1,26 +1,27 @@
 Object:	sphere;
-position_z: -30;
-radius:		3;	
 red:		1;
 blue:		1;
+position_z: -30;
+reflection:	0.1;
 trans:		1;
+radius:		1;
+
 
 Object:	sphere;
-position_x:	5;
-position_y:	-2;
-position_z: -15;
-radius:		5;
 red:		0.9;
 green:		1;
 blue:		0.5;
-trans:		5;
+position_x:	3;
+position_y:	-2;
+position_z: -15;
+radius:		1;
+
 
 Object:	light;
+red:		1;
+green:		1;
+blue:		1;
 position_x:	0;
 position_y:	20;
 position_z: -30;
 radius:		2;
-red:		1;
-green:		1;
-blue:		1;
-trans:		0.5;

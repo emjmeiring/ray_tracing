@@ -96,9 +96,9 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 	}
 //printf(" :%d: ", i);
 	if(!sphere)
-		return (t_vec){2,2,2};
+		return (t_vec){0.3,0.4,0.6};
 	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
-	n_hit = vec_subtract(p_hit, (t_vec){pony->position_x, pony->position_y, pony->position_z});
+	n_hit = vec_subtract(p_hit, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
 	n_hit = normalize(&n_hit);
 	if (dot_product(r->dir, n_hit) > 0)
 	{
@@ -130,23 +130,24 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 		surf_color = cross_prod(surf_color, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
 	}
 //printf(" :%d: ", i);
-	return (pixel);
+	return (surf_color);
 }
-/*
+
 //remove this pony if getsnene works
 t_object	*my_pony(void)
 {
 	t_object	*pony;
 	static int i=0;
 	pony = (t_object*)malloc(sizeof(t_object));
-	pony->name = "sphere";
-	pony->red = 200;
-	pony->green = 100;
-	pony->blue = 255;
+	pony->name = "Sphere";
+	pony->red = 1;
+	pony->green = 0.2;
+	pony->blue = 1;
 	pony->reflection = 1;
-	pony->position_x = 0;
-	pony->position_y = i;
-	pony->position_z = -20;
+	pony->trans = i;
+	pony->position_x = i;
+	pony->position_y = i*3;
+	pony->position_z = -10-(5*i);
 	pony->radius = 2*(++i);
 	pony->radius_x2 = pony->radius*pony->radius;
 	pony->length_x = 0;
@@ -155,7 +156,7 @@ t_object	*my_pony(void)
 	pony->next = NULL;
 	return (pony);
 }
-*/
+
 void le_main(t_object *objects)
 {
 	t_object		*pony;
@@ -168,8 +169,8 @@ void le_main(t_object *objects)
 	r.origin.y = 0;
 	r.origin.z = 0;
 	set_up_num(&num);
-		//objects = my_pony();
-		//objects->next = my_pony();
+	objects = my_pony();
+	objects->next = my_pony();
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;
@@ -189,6 +190,9 @@ void le_main(t_object *objects)
 			r.dir = normalize(&r.dir);
 			//printf("1len		%f\n", sqrt(dot_product(r.dir,r.dir)));
 			pixel = trace(&r, objects, 0);
+			img[(num.j + num.i*WIDTH)*3 + 0] = pixel.x * 255;
+			img[(num.j + num.i*WIDTH)*3 + 1] = pixel.y * 255;
+			img[(num.j + num.i*WIDTH)*3 + 2] = pixel.z * 255;
 			/*
 			printf("x=%f==\n", r.dir.x);
 			printf("y=%f==\n", r.dir.y);
@@ -198,9 +202,7 @@ void le_main(t_object *objects)
 			num.j++;
 		}
 		num.i++;
-	}
-	
-	
+	}	
 	/*
 	pony = objects;
 	for(i=0;i<HEIGHT;i++){
@@ -233,9 +235,9 @@ void le_main(t_object *objects)
 			}
 			pony = objects;
 		}
-	}
+	}*/
 	save_xpm("scene1.xpm", img, WIDTH, HEIGHT);
-*/
+	pony_freedom(objects);
 }
 
 int	main(int argc, char **argv)
@@ -243,7 +245,7 @@ int	main(int argc, char **argv)
 	int		a;
 	t_object	*pony;
 	t_object	*objects;
-	
+	/*
 	if (argc != 2)
 		return (0);
 	while (*++argv)
@@ -268,9 +270,9 @@ int	main(int argc, char **argv)
 			printf("%s - length_z:	%f\n\n", *argv, pony->length_z);
 			pony = pony->next;
 		}
-	}
+	}*/
 	le_main(objects);
-	pony_freedom(objects);
+	//pony_freedom(objects);
 	return (2000);
 }
 

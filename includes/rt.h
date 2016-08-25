@@ -21,7 +21,7 @@
 #define WIDTH  800
 #define HEIGHT 600
 #define INF 1e8
-#define M_DEPTH 4
+#define M_DEPTH 10
 
 typedef struct	s_color
 {
