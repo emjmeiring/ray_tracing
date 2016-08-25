@@ -3,6 +3,7 @@ position_z: -30;
 radius:		3;	
 red:		1;
 blue:		1;
+trans:		1;
 
 Object:	sphere;
 position_x:	5;
@@ -12,6 +13,7 @@ radius:		5;
 red:		0.9;
 green:		1;
 blue:		0.5;
+trans:		5;
 
 Object:	light;
 position_x:	0;
@@ -21,3 +23,4 @@ radius:		2;
 red:		1;
 green:		1;
 blue:		1;
+

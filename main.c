@@ -32,6 +32,11 @@ t_vec	normalize(t_vec *r)
 	return (dir);
 }
 
+float		mix(float a, float b, float mix)
+{
+	return (b * mix + a * (1 - mix));
+}
+
 t_color		trace(t_ray *r, t_object *objects, int depth)
 {
 	t_color		pixel;
@@ -45,6 +50,8 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	float		tclosest;
 	float		t0;
 	float		t1;
+	float		facing_ratio;
+	float		fresnel;
 	int			inside;
 		//static int i =0;
 	sphere = NULL;
@@ -54,6 +61,7 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	tclosest = INF;
 	bias = 1e-4;
 	inside = 0;
+	facing_ratio = 0;
 //neg = (t_vec){-1, -1, -1};
 	while (pony && strcmp(pony->name, "Sphere") == 0)
 	{
@@ -71,10 +79,10 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 			}
 		}
 //printf("2^^%f^%f^^\n", t[0], t[1]);//printf("name:		%s\n", pony->name);
-			//printf("**%p**\n", sphere);
+//printf("**%p**\n", sphere);
 		pony = pony->next;
 	}
-		//printf(" :%d: ", i);
+//printf(" :%d: ", i);
 	if(!sphere)
 		return (t_color){2,2,2};
 	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
@@ -84,8 +92,13 @@ t_color		trace(t_ray *r, t_object *objects, int depth)
 	{
 		n_hit = scale_vec(-1.f, n_hit);
 		inside = 1;
+printf("p_hit:(%f,%f,%f)\n n_hit:(%f,%f,%f)\nin: %d\nn_hit Len: %f\n", p_hit.x, p_hit.y, p_hit.z, n_hit.x, n_hit.y, n_hit.z, inside, sqrt(dot_product(n_hit,n_hit)));
 	}
-	if(inside)printf("p_hit:(%f,%f,%f)\n n_hit:(%f,%f,%f)\nin: %d\nn_hit Len: %f\n", p_hit.x, p_hit.y, p_hit.z, n_hit.x, n_hit.y, n_hit.z, inside, sqrt(dot_product(n_hit,n_hit)));
+	if ((sphere->trans > 0 || sphere->reflection) && depth < M_DEPTH)
+	{
+		facing_ratio = -1 * dot_product(r->dir, n_hit);
+		fresnel = mix(pow(1 - facingratio, 3), 1, 0.1);
+	}
 //printf(" :%d: ", i);
 	return (pixel);
 }
