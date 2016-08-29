@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 
+
 # define R1		pony->radius
 
 typedef struct	s_mem_list
@@ -42,6 +43,9 @@ typedef struct	s_object
 	float			length_x;
 	float			length_y;
 	float			length_z;
+	float			emis_r;
+	float			emis_g;
+	float			emis_b;
 	struct s_object *next;
 }				t_object;
 

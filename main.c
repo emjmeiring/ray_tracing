@@ -74,8 +74,9 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 	eta = 0;
 	cosi = 0;
 	k = 0;
+	
 //neg = (t_vec){-1, -1, -1};
-	while (pony && strcmp(pony->name, "Sphere") == 0)
+	while (pony)
 	{
 			//printf("%s : ", pony->name);
 //printf("^^%f^%f^^\n", t[0], t[1]);//printf("pos = #%f#%f#%f#\n", pony->position_x, pony->position_y, pony->position_z);
@@ -87,6 +88,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 			{
 				tclosest = t0;
 				sphere = pony;
+				surf_color = (t_vec){sphere->red, sphere->green, sphere->blue};
 //printf("**%p**\n", sphere);
 			}
 		}
@@ -96,7 +98,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 	}
 //printf(" :%d: ", i);
 	if(!sphere)
-		return (t_vec){0.3,0.4,0.6};
+		return (t_vec){0,0,0};
 	p_hit = add_vec(r->origin, scale_vec(tclosest, r->dir));
 	n_hit = vec_subtract(p_hit, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
 	n_hit = normalize(&n_hit);
@@ -118,19 +120,61 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 		{
 			if(inside)
 				eta = ior;
-			else eta = .1f * ior;
-			cosi = -1 * dot_product(n_hit, r->dir);
-			k = 1 - eta * eta * (1 - cosi * cosi);
+			else eta = 1.0f / ior;
+			cosi = -1.0f * dot_product(n_hit, r->dir);
+			k = 1.0f - eta * eta * (1.0f - cosi * cosi);
 			refr.dir = add_vec(scale_vec(eta, r->dir), scale_vec(eta * cosi - sqrt(k), n_hit));
 			refr.dir = normalize(&refr.dir);
 			refr.origin = vec_subtract(p_hit, scale_vec(bias, n_hit));
-			refr_color = trace(&refr, objects, depth + 1);
+			refr_color = trace(&refr, objects, depth + 1.0f);
 		}
-		surf_color = add_vec(scale_vec(fresnel, (t_vec)refl_color), scale_vec((1 -fresnel) *  sphere->trans,(t_vec)refr_color));
+		surf_color = add_vec(scale_vec(fresnel, (t_vec)refl_color), scale_vec((1.0f - fresnel) *  sphere->trans,(t_vec)refr_color));
 		surf_color = cross_prod(surf_color, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
 	}
+	else
+	{
+		pony = objects;
+		t_ray light_ray;
+		t_object light;
+		t0 = INF;
+		t1 = INF;
+		float x;
+		while (pony)
+		{
+			if (strcmp(pony->name, "Light") == 0)
+			{
+				t_vec sphere_color = (t_vec){sphere->red, sphere->green, sphere->blue};
+				t_vec transmission = (t_vec){1,1,1};
+				light_ray.dir = vec_subtract((t_vec){pony->position_x, pony->position_y, pony->position_z}, p_hit);
+				light_ray.dir = normalize(&light_ray.dir);
+				t_object *unicorn = objects;
+				while (unicorn)
+				{
+					if (strcmp(unicorn->name, "Light") !=  0)
+					{
+						light_ray.origin = add_vec(p_hit, scale_vec(bias, n_hit));
+						if(intersect_sphere(&light_ray, unicorn, &t0, &t1))
+						{
+							transmission = (t_vec){0,0,0};
+							light = *unicorn;
+							unicorn = NULL;
+						}
+					}
+					if (unicorn)
+						unicorn = unicorn->next;
+				}
+				t_vec a = cross_prod(sphere_color, transmission);
+				x = dot_product(n_hit,light_ray.dir);
+				if (x < 0)
+					x = 0;
+				t_vec b = scale_vec(x, (t_vec){light.emis_r, light.emis_g, light.emis_b});
+				surf_color = add_vec(surf_color, cross_prod(a, b));
+			}
+			pony = pony->next;
+		}
+	}
 //printf(" :%d: ", i);
-	return (surf_color);
+	return (add_vec(surf_color, (t_vec){sphere->emis_r, sphere->emis_g, sphere->emis_b}));
 }
 
 //remove this pony if getsnene works
@@ -140,19 +184,22 @@ t_object	*my_pony(void)
 	static int i=0;
 	pony = (t_object*)malloc(sizeof(t_object));
 	pony->name = "Sphere";
-	pony->red = 1;
-	pony->green = 0.2;
+	pony->red = 0;
+	pony->green = (i + 1) * .5;
 	pony->blue = 1;
-	pony->reflection = 1;
-	pony->trans = i;
+	pony->reflection = i/5.0f;
+	pony->trans = 0;
 	pony->position_x = i;
 	pony->position_y = i*3;
 	pony->position_z = -10-(5*i);
-	pony->radius = 2*(++i);
+	pony->radius = (++i);
 	pony->radius_x2 = pony->radius*pony->radius;
 	pony->length_x = 0;
 	pony->length_y = 0;
 	pony->length_z = 0;
+	pony->emis_r = 0;
+	pony->emis_g = 0;
+	pony->emis_b = 0;
 	pony->next = NULL;
 	return (pony);
 }
@@ -174,9 +221,10 @@ void le_main(t_object *objects)
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;
-		num.y_dir = (1 - 2 * ((num.i + 0.5f) * num.inv_h)) * num.angle;
+		
 		while (num.j < WIDTH)
 		{
+		num.y_dir = (1 - 2 * ((num.i + 0.5f) * num.inv_h)) * num.angle;
 			num.x_dir = (2 * ((num.j + 0.5f) * num.inv_w) - 1) * num.angle * 							num.aspect_r;
 			r.dir.x = num.x_dir;
 			r.dir.y = num.y_dir;
