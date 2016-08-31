@@ -155,6 +155,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 		t_object *light;
 		t0 = INF;
 		t1 = INF;
+		//light = (t_vec){0,0,0};
 		float x = 0;
 		while (pony)
 		{
@@ -166,6 +167,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 				light_ray.dir = normalize(&light_ray.dir);
 				//printf("%f",sqrt(length2(&light_ray.dir)));
 				t_object *unicorn = objects;
+				light = pony;
 				while (unicorn)
 				{
 					if (strcmp(unicorn->name, "Light") !=  0)
@@ -243,9 +245,9 @@ void le_main(t_object *objects)
 	r.origin.y = 0;
 	r.origin.z = 0;
 	set_up_num(&num);
-	objects = my_pony("Sphere", (t_vec){0.9, 0.3, 0.3}, 0.0, 0.0, (t_vec){0.0, -10004, -20}, 10000, (t_vec){0,0,0});
-	objects->next = my_pony("Sphere", (t_vec){1.0, 0.32, 0.36}, 0.0, 0.0, (t_vec){0.0, 0.0, -20}, 4, (t_vec){0,0,0});
-	objects->next->next = my_pony("Sphere", (t_vec){0.9, 0.76, 0.46}, 0.0, 0.0, (t_vec){5.0, -1.0, -15}, 2, (t_vec){0,0,0});
+	objects = my_pony("Sphere", (t_vec){0.2, 0.2, 0.2}, 0.0, 0.0, (t_vec){0.0, -10004, -20}, 10000, (t_vec){0,0,0});
+	objects->next = my_pony("Sphere", (t_vec){1.0, 0.32, 0.36}, 1.0, 0.0, (t_vec){0.0, 0.0, -20}, 4, (t_vec){0,0,0});
+	objects->next->next = my_pony("Sphere", (t_vec){0.9, 0.76, 0.46}, 0.0, 1.0, (t_vec){5.0, -1.0, -15}, 2, (t_vec){0,0,0});
 	objects->next->next->next = my_pony("Sphere", (t_vec){0.65, 0.77, 0.97}, 0.0, 0.0, (t_vec){5.0, 0.0, -25}, 3, (t_vec){0,0,0});
 	objects->next->next->next->next = my_pony("Sphere", (t_vec){0.9, 0.1, 0.9}, 0.0, 0.0, (t_vec){-5.5, 5.0, -15}, 3, (t_vec){0,0,0});
 	objects->next->next->next->next->next = my_pony("Light", (t_vec){0.0, 0.0, 0.0}, 0.0, 0.0, (t_vec){0.0, 20.0, -30}, 3, (t_vec){3,3,3});
@@ -269,9 +271,9 @@ void le_main(t_object *objects)
 			r.dir = normalize(&r.dir);
 			//printf("1len		%f\n", sqrt(dot_product(r.dir,r.dir)));
 			pixel = trace(&r, objects, 0);
-			img[(num.j + num.i * WIDTH) * 3 + 0] = pixel.x * 255;
-			img[(num.j + num.i*WIDTH)*3 + 1] = pixel.y * 255;
-			img[(num.j + num.i*WIDTH)*3 + 2] = pixel.z * 255;
+			img[(num.j + num.i * WIDTH) * 3 + 0] = min(1, pixel.x) * 255;
+			img[(num.j + num.i*WIDTH)*3 + 1] = min(1, pixel.y) * 255;
+			img[(num.j + num.i*WIDTH)*3 + 2] = min(1, pixel.z) * 255;
 			/*
 			printf("x=%f==\n", r.dir.x);
 			printf("y=%f==\n", r.dir.y);
