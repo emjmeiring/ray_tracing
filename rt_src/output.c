@@ -19,7 +19,7 @@ void	save_xpm(char *f_name, unsigned char *image, int width, int height)
 	FILE *file;
 
 	file = fopen(f_name, "w");
-	fprintf(file, "P6 %d %d %d\n", width, height, 255);
+	fprintf(file, "P6\n %d %d \n%d\n", width, height, 255);
 	fwrite(image, 3, width*height, file);
 	fclose(file);
 }

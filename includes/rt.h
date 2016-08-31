@@ -18,10 +18,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include "get_scene.h"
-#define WIDTH  800
-#define HEIGHT 600
+#define WIDTH  640
+#define HEIGHT 480
 #define INF 1e8
-#define M_DEPTH 50
+#define M_DEPTH 2
 
 typedef struct	s_color
 {
