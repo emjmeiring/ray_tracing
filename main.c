@@ -106,7 +106,6 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 //printf("**%p**\n", sphere);
 			}
 		}
-		if(int_plain)
 		
 //printf("2^^%f^%f^^\n", t[0], t[1]);//printf("name:		%s\n", pony->name);
 //printf("**%p**\n", sphere);
@@ -130,7 +129,6 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 		fresnel = mix(pow(1 - facing_ratio, 3), 1, 0.1);
 		refl.dir = vec_subtract(r->dir, scale_vec(2*dot_product(r->dir, n_hit), n_hit));
 		refl.dir = normalize(&refl.dir);
-		printf(length2(&refl.dir
 		refl.origin = add_vec(p_hit, scale_vec(bias, n_hit));
 		refl_color = trace(&refl, objects, depth + 1);
 		if (sphere->trans)
@@ -154,7 +152,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 		t_vec sphere_color;
 		t_vec transmission;
 		t_ray light_ray;
-		t_object light;
+		t_object *light;
 		t0 = INF;
 		t1 = INF;
 		float x = 0;
@@ -166,6 +164,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 				transmission = (t_vec){1,1,1};
 				light_ray.dir = vec_subtract((t_vec){pony->position_x, pony->position_y, pony->position_z}, p_hit);
 				light_ray.dir = normalize(&light_ray.dir);
+				//printf("%f",sqrt(length2(&light_ray.dir)));
 				t_object *unicorn = objects;
 				while (unicorn)
 				{
@@ -175,7 +174,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 						if(intersect_sphere(&light_ray, unicorn, &t0, &t1))
 						{
 							transmission = (t_vec){0,0,0};
-							light = *unicorn;
+							light = pony;
 							unicorn = NULL;
 						}
 					}
@@ -188,18 +187,18 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 				/*if (x < 0)
 					x = 0;*/
 					//printf("light_emis: %f, %f, %f\n",light.emis_r, light.emis_g, light.emis_b);
-				t_vec b = scale_vec(x, (t_vec){light.emis_r, light.emis_g, light.emis_b});
+				t_vec b = scale_vec(x, (t_vec){light->emis_r, light->emis_g, light->emis_b});
 				surf_color = add_vec(surf_color, cross_prod(a, b));
 			}
 			pony = pony->next;
 		}
-		printf("sphere_color: %f, %f, %f\n",sphere_color.x, sphere_color.y, sphere_color.z);
+/*		printf("surf_color: %f, %f, %f\n",surf_color.x, surf_color.y, surf_color.z);
 if (surf_color.y >= 0.8){
 printf("sphere_color: %f, %f, %f\n",sphere_color.x, sphere_color.y, sphere_color.z);
 printf("transmission: %f, %f, %f\n",transmission.x, transmission.y, transmission.z);
 printf("x = %f\n", x);
 printf("light_emis: %f, %f, %f\n",light.emis_r, light.emis_g, light.emis_b);
-}
+}*/
 	}
 //printf(" :%d: ", i);
 	return (add_vec(surf_color, (t_vec){sphere->emis_r, sphere->emis_g, sphere->emis_b}));
