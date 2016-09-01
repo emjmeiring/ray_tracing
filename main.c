@@ -88,7 +88,8 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 	cosi = 0;
 	k = 0;
 	surf_color = (t_vec){0,0,0};
-	
+	refl_color = (t_vec){0,0,0};
+	refr_color = (t_vec){0,0,0};
 //neg = (t_vec){-1, -1, -1};
 	while (pony)
 	{
@@ -126,25 +127,34 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 	if ((sphere->trans > 0 || sphere->reflection > 0) && depth < M_DEPTH)
 	{
 		facing_ratio = -1 * dot_product(r->dir, n_hit);
-		fresnel = mix(pow(1 - facing_ratio, 3), 1, 0.1);
+		//printf("f_ratio: %f\n" , facing_ratio);
+		fresnel = mix(pow(1 - facing_ratio, 5), 1, .1);
+		//printf("fresnel: %f\n" , fresnel);
 		refl.dir = vec_subtract(r->dir, scale_vec(2*dot_product(r->dir, n_hit), n_hit));
 		refl.dir = normalize(&refl.dir);
 		refl.origin = add_vec(p_hit, scale_vec(bias, n_hit));
 		refl_color = trace(&refl, objects, depth + 1);
+		//printf("refl_color: %f , %f , %f\n", refl_color.x, refl_color.y, refl_color.z);
 		if (sphere->trans)
 		{
 			if(inside)
 				eta = ior;
 			else eta = 1.0f / ior;
 			cosi = -1.0f * dot_product(n_hit, r->dir);
+			//printf("cosi: %f\n" , cosi);
 			k = 1.0f - eta * eta * (1.0f - cosi * cosi);
-			refr.dir = add_vec(scale_vec(eta, r->dir), scale_vec(eta * cosi - sqrt(k), n_hit));
+			//printf("k: %f\n" , k);
+			refr.dir = add_vec(scale_vec(eta, r->dir), 
+						scale_vec(eta * cosi - sqrt(k), n_hit));
 			refr.dir = normalize(&refr.dir);
 			refr.origin = vec_subtract(p_hit, scale_vec(bias, n_hit));
 			refr_color = trace(&refr, objects, depth + 1.0f);
 		}
-		surf_color = add_vec(scale_vec(fresnel, (t_vec)refl_color), scale_vec((1.0f - fresnel) *  sphere->trans,(t_vec)refr_color));
-		surf_color = cross_prod(surf_color, (t_vec){sphere->position_x, sphere->position_y, sphere->position_z});
+		surf_color = add_vec(scale_vec(fresnel, refl_color),
+					scale_vec((1.0f - fresnel) *  sphere->trans,refr_color));
+//printf("surf_color: %f, %f, %f\n",surf_color.x, surf_color.y, surf_color.z);
+		surf_color = cross_prod(surf_color, (t_vec){sphere->red,
+					sphere->green, sphere->blue});
 	}
 	else
 	{
@@ -175,7 +185,7 @@ t_vec		trace(t_ray *r, t_object *objects, int depth)
 						light_ray.origin = add_vec(p_hit, scale_vec(bias, n_hit));
 						if(intersect_sphere(&light_ray, unicorn, &t0, &t1))
 						{
-							transmission = (t_vec){0,0,0};
+							transmission = (t_vec){0.1,0.1,0.1};
 							light = pony;
 							unicorn = NULL;
 						}
@@ -203,6 +213,8 @@ printf("light_emis: %f, %f, %f\n",light.emis_r, light.emis_g, light.emis_b);
 }*/
 	}
 //printf(" :%d: ", i);
+//printf("surf_color: %f, %f, %f ",surf_color.x, surf_color.y, surf_color.z);
+//printf("light_emis: %f, %f, %f || ",sphere->emis_r, sphere->emis_g, sphere->emis_b);
 	return (add_vec(surf_color, (t_vec){sphere->emis_r, sphere->emis_g, sphere->emis_b}));
 }
 
@@ -248,8 +260,8 @@ void le_main(t_object *objects)
 	objects = my_pony("Sphere", (t_vec){0.2, 0.2, 0.2}, 0.0, 0.0, (t_vec){0.0, -10004, -20}, 10000, (t_vec){0,0,0});
 	objects->next = my_pony("Sphere", (t_vec){1.0, 0.32, 0.36}, 1.0, 0.0, (t_vec){0.0, 0.0, -20}, 4, (t_vec){0,0,0});
 	objects->next->next = my_pony("Sphere", (t_vec){0.9, 0.76, 0.46}, 0.0, 1.0, (t_vec){5.0, -1.0, -15}, 2, (t_vec){0,0,0});
-	objects->next->next->next = my_pony("Sphere", (t_vec){0.65, 0.77, 0.97}, 0.0, 0.0, (t_vec){5.0, 0.0, -25}, 3, (t_vec){0,0,0});
-	objects->next->next->next->next = my_pony("Sphere", (t_vec){0.9, 0.1, 0.9}, 0.0, 0.0, (t_vec){-5.5, 5.0, -15}, 3, (t_vec){0,0,0});
+	objects->next->next->next = my_pony("Sphere", (t_vec){0.65, 0.77, 0.97}, 0.5, 0.0, (t_vec){5.0, 0.0, -25}, 3, (t_vec){0,0,0});
+	objects->next->next->next->next = my_pony("Sphere", (t_vec){0.9, 0.1, 0.9}, 0.0, 0.0, (t_vec){-5.5, 5.0, -15}, 3, (t_vec){0, 0, 0});
 	objects->next->next->next->next->next = my_pony("Light", (t_vec){0.0, 0.0, 0.0}, 0.0, 0.0, (t_vec){0.0, 20.0, -30}, 3, (t_vec){3,3,3});
 	while (num.i < HEIGHT)
 	{
