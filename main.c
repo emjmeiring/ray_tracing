@@ -284,8 +284,8 @@ void le_main(t_object *objects)
 			//printf("1len		%f\n", sqrt(dot_product(r.dir,r.dir)));
 			pixel = trace(&r, objects, 0);
 			img[(num.j + num.i * WIDTH) * 3 + 0] = min(1, pixel.x) * 255;
-			img[(num.j + num.i*WIDTH)*3 + 1] = min(1, pixel.y) * 255;
-			img[(num.j + num.i*WIDTH)*3 + 2] = min(1, pixel.z) * 255;
+			img[(num.j + num.i * WIDTH) * 3 + 1] = min(1, pixel.y) * 255;
+			img[(num.j + num.i * WIDTH) * 3 + 2] = min(1, pixel.z) * 255;
 			/*
 			printf("x=%f==\n", r.dir.x);
 			printf("y=%f==\n", r.dir.y);
@@ -329,15 +329,32 @@ void le_main(t_object *objects)
 			pony = objects;
 		}
 	}*/
-	save_xpm("scene1.ppm", img, WIDTH, HEIGHT);
+	save_xpm("scene1.xpm", img, WIDTH, HEIGHT);
 	pony_freedom(objects);
 }
 
 int	main(int argc, char **argv)
 {
-	int		a;
+	int			a;
 	t_object	*pony;
 	t_object	*objects;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	int			w;
+	int			h;
+
+	w = WIDTH;
+	h = HEIGHT;
+	le_main(objects);
+	mlx = mlx_init();
+	win = mlx_new_window(mlx, w, h, "haha");
+	img = mlx_xpm_file_to_image(mlx, "scene1.xpm", &w, &h);
+	if (!(mlx_put_image_to_window(mlx, win, img, 0, 0)))
+	{
+		write(1, "wow\n", 4);
+		return 0;
+	}
 	/*
 	if (argc != 2)
 		return (0);
@@ -364,7 +381,7 @@ int	main(int argc, char **argv)
 			pony = pony->next;
 		}
 	}*/
-	le_main(objects);
+	
 	//pony_freedom(objects);
 	return (2000);
 }

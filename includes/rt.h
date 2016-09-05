@@ -12,7 +12,7 @@
 
 #ifndef RT_H
 #define RT_H
-//#include <mlx.h>
+#include <mlx.h>
 #include <math.h>
 #include <unistd.h>
 #include <string.h>

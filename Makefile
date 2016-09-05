@@ -21,7 +21,7 @@ RM = rm -f
 MACMLX = -lm -lmlx -framework OpenGL -framework AppKit
 LIXMLX = -lm -lmlx -lXext -lX11
 
-INC = -I ./incledes/ #/usr/include/X11 -I ./
+INC = -I ./incledes/ /usr/include/X11 -I ./
 
 OBJ = $(SRC:.c=.o)
 
@@ -37,7 +37,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 		@echo "Compiled the pieces together..."
 ifeq ($(shell uname), Linux)
-		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) -lm #$(LIXMLX)
+		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) $(LIXMLX)
 else
 		@$(CC) $(FLAG) $(OBJ) -o $@ $(INC) $(MACMLX)
 endif
