@@ -14,7 +14,7 @@ CC = gcc -g
 
 NAME = rt
 
-SRC = ./main.c ./rt_src/maths.c ./rt_src/intersection.c ./rt_src/init.c ./rt_src/output.c ./get_scene/get_scene.c ./get_scene/pony.c
+SRC = ./main.c ./rt_src/maths.c ./rt_src/intersection.c ./rt_src/init.c ./rt_src/output.c ./get_scene/my_get.c ./get_scene/get_next_line.c
 
 RM = rm -f
 

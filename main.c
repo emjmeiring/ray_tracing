@@ -266,10 +266,9 @@ void le_main(t_object *objects)
 	while (num.i < HEIGHT)
 	{
 		num.j = 0;
-		
+		num.y_dir = (1 - 2 * ((num.i + 0.5f) * num.inv_h)) * num.angle;
 		while (num.j < WIDTH)
 		{
-			num.y_dir = (1 - 2 * ((num.i + 0.5f) * num.inv_h)) * num.angle;
 			num.x_dir = (2 * ((num.j + 0.5f) * num.inv_w) - 1) * num.angle * 							num.aspect_r;
 			r.dir.x = num.x_dir;
 			r.dir.y = num.y_dir;

@@ -21,12 +21,6 @@
 
 # define R1		pony->radius
 
-typedef struct	s_mem_list
-{
-	void				*address;
-	struct s_mem_list	*next;
-}				t_mem_list;
-
 typedef struct	s_object
 {
 	char			*name;
@@ -47,7 +41,7 @@ typedef struct	s_object
 	float			emis_g;
 	float			emis_b;
 	struct s_object *next;
-}				t_object;
+}					t_object;
 
 t_object		*fresh_pony(void);
 t_object		*get_scene(char *name);
@@ -56,5 +50,6 @@ char			*unicorn_name(char *s, int a);
 int				f_cmp(const char *s1, const char *s2, int a);
 void			pony_freedom(t_object *first);
 float			f_atof(const char *s, int a);
+int				get_next_line(int fd, char **line);
 
 #endif
